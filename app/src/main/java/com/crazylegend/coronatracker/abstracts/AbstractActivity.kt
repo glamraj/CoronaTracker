@@ -1,4 +1,4 @@
-package com.crazylegend.coronatracker
+package com.crazylegend.coronatracker.abstracts
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

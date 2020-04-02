@@ -9,4 +9,8 @@
     <color name="secondaryText">#757575</color>
     <color name="dividerColor">#BDBDBD</color>
     <color name="recoveredColor">#8ACA2B </color>
+    <color name="walkThroughBGColor">#323a46</color>
+
+    <color name="dotActive">#00D36B</color>
+    <color name="dotInactive">#007911</color>
 </resources>
