@@ -33,7 +33,6 @@ class CoronaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         doOnEnd { itemView.alpha = 1f }
     }
 
-
     fun bind(item: CoronaModel) {
         animation.end()
         binding.flag.loadImgNoCache(countryFlag(item.country))
