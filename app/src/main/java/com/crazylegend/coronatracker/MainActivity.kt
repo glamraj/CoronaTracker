@@ -1,6 +1,7 @@
 package com.crazylegend.coronatracker
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.LiveData
@@ -12,12 +13,14 @@ import com.crazylegend.coronatracker.databinding.ActivityMainBinding
 import com.crazylegend.coronatracker.utils.setupWithNavController
 import com.crazylegend.coronatracker.vms.MainActivityViewModel
 import com.crazylegend.kotlinextensions.livedata.compatProvider
+import com.crazylegend.kotlinextensions.log.debug
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.gone
 import com.crazylegend.kotlinextensions.views.toColorSpan
 import com.crazylegend.kotlinextensions.views.toSizeSpan
 import com.crazylegend.kotlinextensions.views.visible
 import com.google.android.material.textview.MaterialTextView
+import javax.inject.Inject
 
 class MainActivity : AbstractActivity() {
 
@@ -27,6 +30,7 @@ class MainActivity : AbstractActivity() {
 
     private var currentNavController: LiveData<NavController>? = null
 
+
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class MainActivity : AbstractActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
+
     }
     /**
      * Called on first creation and when restoring state.

@@ -19,6 +19,7 @@ import com.crazylegend.coronatracker.adapters.CoronaViewHolder
 import com.crazylegend.coronatracker.databinding.FragmentCountriesBinding
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.vms.MainActivityViewModel
+import com.crazylegend.kotlinextensions.abstracts.AbstractListAdapter
 import com.crazylegend.kotlinextensions.livedata.sharedProvider
 import com.crazylegend.kotlinextensions.recyclerview.clickListeners.forItemClickListenerDSL
 import com.crazylegend.kotlinextensions.recyclerview.generateRecycler
@@ -29,6 +30,7 @@ import com.crazylegend.kotlinextensions.transition.utils.LARGE_EXPAND_DURATION
 import com.crazylegend.kotlinextensions.transition.utils.plusAssign
 import com.crazylegend.kotlinextensions.transition.utils.transitionSequential
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
+import javax.inject.Inject
 
 
 /**
@@ -36,15 +38,14 @@ import com.crazylegend.kotlinextensions.viewBinding.viewBinding
  */
 class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
     override val binding by viewBinding(FragmentCountriesBinding::bind)
-    private val viewModel by lazy {
-        sharedProvider<MainActivityViewModel>()
-    }
 
-    private val coronaAdapter by lazy {
-        generateRecycler<CoronaModel, CoronaViewHolder>(R.layout.itemview_corona, CoronaViewHolder::class.java) { item, holder, _ ->
-            holder.bind(item)
-        }
-    }
+    private val viewModel by lazy { sharedProvider<MainActivityViewModel>() }
+
+    @Inject
+    lateinit var coronaAdapter : AbstractListAdapter<CoronaModel, CoronaViewHolder>
+    @Inject
+    lateinit var placeHolderAdapter:CoronaPlaceHolderAdapter
+
     private var savedItemAnimator: RecyclerView.ItemAnimator? = null
 
     private val fade = transitionSequential {
@@ -60,9 +61,7 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
             }
         })
     }
-    private val placeHolderAdapter by lazy {
-        CoronaPlaceHolderAdapter()
-    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

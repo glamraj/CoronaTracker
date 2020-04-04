@@ -11,6 +11,7 @@ import com.crazylegend.coronatracker.databinding.ActivityWalkthroughBinding
 import com.crazylegend.kotlinextensions.activity.launchActivityAndFinish
 import com.crazylegend.kotlinextensions.context.getCompatColor
 import com.crazylegend.kotlinextensions.log.debug
+import com.crazylegend.kotlinextensions.sharedprefs.putBoolean
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.invisible
 import com.crazylegend.kotlinextensions.views.setOnClickListenerCooldown

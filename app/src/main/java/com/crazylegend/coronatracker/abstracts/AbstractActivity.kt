@@ -3,6 +3,7 @@ package com.crazylegend.coronatracker.abstracts
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import dagger.android.AndroidInjection
 
 
 /**
@@ -12,6 +13,7 @@ abstract class AbstractActivity : AppCompatActivity() {
     abstract val binding:ViewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
     }
