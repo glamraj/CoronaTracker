@@ -2,4 +2,22 @@
     <string name="app_name">Corona Tracker</string>
     <string name="yesterday">Yesterday</string>
     <string name="now">Now</string>
+    <string name="know_how_it_spreads">KNOW HOW IT SPREADS</string>
+    <string name="step1_text">There is currently NO Vaccine to prevent COVID-19\nThe virus is thought to spread mainly from person-to-person contact through respiratory droplets produced when an infected person coughs or sneezes.</string>
+    <string name="take_steps_to_protect_yourself">TAKE STEPS TO PROTECT YOURSELF</string>
+    <string name="step2_text">Frequently wash your hands with soap and water for at least 20 seconds.\nAlways Carry a hand sanitizer that contains at least 60% alcohol.\nAvoid touching your eyes, nose, and mouth with unwashed hands.</string>
+    <string name="avoid_close_contact">"AVOID CLOSE CONTACT"</string>
+    <string name="steps_text">Avoid close contact with people who are sick.\nPut distance between yourself and other people if COVID-19/Coronavirus is spreading in your community.</string>
+    <string name="step4_text">Cover your mouth and nose with a tissue when you cough or sneeze or use the inside of your elbow.\nImmediately wash your hands with soap and water for at least 20 seconds or clean your hands with a hand sanitizer that contains at least 60%% alcohol.</string>
+    <string name="clean_disenfect"><![CDATA[CLEAN & DISINFECT]]></string>
+    <string name="step5_text"><![CDATA[Clean & disinfect frequently touched surfaces daily. This includes tables, doorknobs, light switches, countertops, handles, desks, phones, keyboards, toilets, faucets, and sinks.\nIf surfaces are dirty, clean them: Use detergent or soap and water prior to disinfection.]]></string>
+    <string name="skip">Skip</string>
+    <string name="no_cases_returned">No cases are returned!</string>
+    <string name="try_again_later">Try again later!!!</string>
+    <string name="countries">Countries</string>
+    <string name="statistics">Statistics</string>
+    <string name="last_updated">Last updated</string>
+    <string name="world">World</string>
+    <string name="search">Search</string>
+    <string name="search_by_country_name">Search by country...</string>
 </resources>

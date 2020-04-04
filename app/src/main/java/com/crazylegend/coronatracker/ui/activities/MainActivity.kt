@@ -1,26 +1,24 @@
-package com.crazylegend.coronatracker
+package com.crazylegend.coronatracker.ui.activities
 
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.crazylegend.coronatracker.R
 import com.crazylegend.coronatracker.abstracts.AbstractActivity
 import com.crazylegend.coronatracker.databinding.ActivityMainBinding
 import com.crazylegend.coronatracker.utils.setupWithNavController
 import com.crazylegend.coronatracker.vms.MainActivityViewModel
 import com.crazylegend.kotlinextensions.livedata.compatProvider
-import com.crazylegend.kotlinextensions.log.debug
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.gone
 import com.crazylegend.kotlinextensions.views.toColorSpan
 import com.crazylegend.kotlinextensions.views.toSizeSpan
 import com.crazylegend.kotlinextensions.views.visible
 import com.google.android.material.textview.MaterialTextView
-import javax.inject.Inject
 
 class MainActivity : AbstractActivity() {
 

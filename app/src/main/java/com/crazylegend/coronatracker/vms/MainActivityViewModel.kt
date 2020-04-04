@@ -1,21 +1,18 @@
 package com.crazylegend.coronatracker.vms
 
 import android.app.Application
-import android.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.crazylegend.coronatracker.R
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.kotlinextensions.collections.second
-import com.crazylegend.kotlinextensions.context.getCompatColor
-import com.crazylegend.kotlinextensions.livedata.context
 import com.crazylegend.kotlinextensions.retrofit.*
 import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
 import com.crazylegend.kotlinextensions.rx.mainThreadScheduler
 import com.crazylegend.kotlinextensions.rx.singleFrom
+import com.crazylegend.kotlinextensions.tryOrPrint
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import org.jsoup.Jsoup
@@ -32,6 +29,20 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     private val coronaListData: MutableLiveData<RetrofitResult<List<CoronaModel>>> = MutableLiveData()
     val coronaList: LiveData<RetrofitResult<List<CoronaModel>>> = coronaListData
 
+    private val filteredCoronaListData: MutableLiveData<List<CoronaModel>> = MutableLiveData()
+    val filteredCoronaList: LiveData<List<CoronaModel>> = filteredCoronaListData
+
+
+    private val footerData: MutableLiveData<CoronaModel> = MutableLiveData()
+    val footer: LiveData<CoronaModel> = footerData
+
+    private val lastUpdatedData: MutableLiveData<String?> = MutableLiveData()
+    val lastUpdated: LiveData<String?> = lastUpdatedData
+
+    private val casesListData: MutableLiveData<List<String>> = MutableLiveData()
+    val casesList: MutableLiveData<List<String>> = casesListData
+
+
     init {
         fetchData()
     }
@@ -40,18 +51,18 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         coronaListData.loading()
         singleFrom {
             Jsoup.connect(PRIMARY_URL)
-                .timeout(10000)
-                .get()
+                    .timeout(10000)
+                    .get()
         }.subscribeOn(ioThreadScheduler)
-            .observeOn(mainThreadScheduler)
-            .subscribe({
-                handleCases(it)
-                handleDate(it)
-                handleTable(it)
-            }, {
-                coronaListData.callErrorPost(it)
-                it.printStackTrace()
-            }).addTo(compositeDisposable)
+                .observeOn(mainThreadScheduler)
+                .subscribe({
+                    handleCases(it)
+                    handleDate(it)
+                    handleTable(it)
+                }, {
+                    coronaListData.callErrorPost(it)
+                    it.printStackTrace()
+                }).addTo(compositeDisposable)
     }
 
     private fun handleTable(it: Document) {
@@ -63,6 +74,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         val tableSelection = table.select("tbody")
         val tableElements = tableSelection.firstOrNull()?.select("tr")
         val footerElements = tableSelection.second()?.select("tr")?.select("td")
+        tryOrPrint {
+            tableElements?.removeAt(0)
+        }
 
         val header = CoronaModel(
                 country = headerElements?.getOrNull(0)?.text().orEmpty(),
@@ -78,14 +92,13 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 firstCaseDate = headerElements?.getOrNull(10)?.text().orEmpty()
         )
 
-
         val tableList = tableElements?.map { country ->
             val properties = country.select("td")
-            val countryName = when(properties.getOrNull(0)?.text().orEmpty()){
-                "USA"-> "United States"
-                "UK"-> "United Kingdom"
-                "UAE" ->"United Arab Emirates"
-                else-> properties.getOrNull(0)?.text().orEmpty()
+            val countryName = when (properties.getOrNull(0)?.text().orEmpty()) {
+                "USA" -> "United States"
+                "UK" -> "United Kingdom"
+                "UAE" -> "United Arab Emirates"
+                else -> properties.getOrNull(0)?.text().orEmpty()
             }
             val coronaModel = CoronaModel(
                     country = countryName,
@@ -101,9 +114,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                     firstCaseDate = properties.getOrNull(10)?.text().orEmpty()
             )
             coronaModel
-        }?.sortedByDescending { it.totalCases.replace(",", "").toInt() }?: emptyList()
+        }?.sortedByDescending { it.totalCases.replace(",", "").toInt() } ?: emptyList()
 
-        if (tableList.isEmpty()){
+        if (tableList.isEmpty()) {
             coronaListData.emptyData()
 
         } else {
@@ -125,37 +138,30 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 firstCaseDate = footerElements?.getOrNull(10)?.text().orEmpty()
         )
 
+        footerData.postValue(footer)
+
     }
 
     private fun handleDate(document: Document) {
         val lastUpdated = document.getElementsByClass("content-inner")?.select("div")?.getOrNull(2)?.text()
-
+        lastUpdatedData.postValue(lastUpdated)
     }
 
 
     private fun handleCases(it: Document) {
         val casesDeathsAndRecovered = it.select("div#maincounter-wrap")
-        casesDeathsAndRecovered.forEachIndexed { index, element ->
-            val color = when (index) {
-                0 -> {
-                    Color.GRAY
-                }
-                1 -> {
-                    Color.RED
-                }
-                2 -> {
-                    context.getCompatColor(R.color.recoveredColor)
-                }
-                else -> {
-                    Color.LTGRAY
-                }
-            }
-            //addTextToTitleLayout(element.text(), color)
-        }
+        val casesList = casesDeathsAndRecovered.map { it.text() }
+        casesListData.postValue(casesList)
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clearAndDispose()
+    }
+
+    fun filter(query: String) {
+        filteredCoronaListData.value = coronaListData.getSuccess?.filter {
+            it.country.contains(query, true)
+        }
     }
 }

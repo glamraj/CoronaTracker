@@ -12,6 +12,7 @@ import com.crazylegend.coronatracker.databinding.ItemviewCoronaBinding
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.utils.countryFlag
 import com.crazylegend.kotlinextensions.glide.loadImgNoCache
+import com.crazylegend.kotlinextensions.recyclerview.context
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.dp
 import com.crazylegend.kotlinextensions.views.setPrecomputedText
@@ -37,8 +38,8 @@ class CoronaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         animation.end()
         binding.flag.loadImgNoCache(countryFlag(item.country))
         binding.country.setPrecomputedText(item.country)
-        binding.totalCasesAndDeaths.setPrecomputedText("Total cases ${item.totalCases}\nTotal deaths ${item.totalDeaths}")
-        binding.todayCasesAndDeaths.setPrecomputedText("${item.newCases.ifEmpty { "0" }} cases\n${item.newDeaths.ifEmpty { "0" }} deaths")
+        binding.totalCasesAndDeaths.text = item.casesAndDeathsSpan(context)
+        binding.todayCasesAndDeaths.text = item.newCasesAndDeathsSpan(context)
     }
 
     fun showPlaceHolder() {

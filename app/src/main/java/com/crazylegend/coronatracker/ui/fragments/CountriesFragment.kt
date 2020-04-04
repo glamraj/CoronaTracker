@@ -1,10 +1,11 @@
-package com.crazylegend.coronatracker.ui
+package com.crazylegend.coronatracker.ui.fragments
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -22,14 +23,16 @@ import com.crazylegend.coronatracker.vms.MainActivityViewModel
 import com.crazylegend.kotlinextensions.abstracts.AbstractListAdapter
 import com.crazylegend.kotlinextensions.livedata.sharedProvider
 import com.crazylegend.kotlinextensions.recyclerview.clickListeners.forItemClickListenerDSL
-import com.crazylegend.kotlinextensions.recyclerview.generateRecycler
 import com.crazylegend.kotlinextensions.retrofit.handle
+import com.crazylegend.kotlinextensions.rx.bindings.textChanges
+import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import com.crazylegend.kotlinextensions.transition.StaggerTransition
 import com.crazylegend.kotlinextensions.transition.interpolators.FAST_OUT_SLOW_IN
 import com.crazylegend.kotlinextensions.transition.utils.LARGE_EXPAND_DURATION
 import com.crazylegend.kotlinextensions.transition.utils.plusAssign
 import com.crazylegend.kotlinextensions.transition.utils.transitionSequential
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -62,10 +65,31 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
         })
     }
 
+    private var searchView: SearchView? = null
+    private val compositeDisposable by lazy {
+        CompositeDisposable()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        compositeDisposable.clearAndDispose()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
+
+        val searchItem = menu.findItem(R.id.app_bar_search)
+
+        searchItem?.apply {
+            searchView = this.actionView as SearchView?
+        }
+        searchView?.queryHint = getString(R.string.search_by_country_name)
+
+        searchView?.textChanges(compositeDisposable = compositeDisposable){
+            viewModel.filter(it)
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -110,6 +134,10 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
             val action = CountriesFragmentDirections.actionDetailedCountry().setModel(item)
            findNavController().navigate(action)
         }
+
+        viewModel.filteredCoronaList.observe(viewLifecycleOwner, Observer {
+            coronaAdapter.submitList(it)
+        })
     }
 
 

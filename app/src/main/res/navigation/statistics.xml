@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.crazylegend.coronatracker.ui.StatisticsFragment"
+        android:name="com.crazylegend.coronatracker.ui.fragments.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics" />
 

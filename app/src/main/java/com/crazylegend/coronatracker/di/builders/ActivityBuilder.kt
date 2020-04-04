@@ -1,8 +1,8 @@
 package com.crazylegend.coronatracker.di.builders
 
-import com.crazylegend.coronatracker.MainActivity
-import com.crazylegend.coronatracker.WalkThroughActivity
-import com.crazylegend.coronatracker.abstracts.AbstractActivity
+import com.crazylegend.coronatracker.ui.activities.MainActivity
+import com.crazylegend.coronatracker.ui.activities.SplashActivity
+import com.crazylegend.coronatracker.ui.activities.WalkThroughActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -19,4 +19,9 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector
     abstract fun bindMainActivity() : MainActivity
+
+     @ContributesAndroidInjector
+    abstract fun bindSplash() : SplashActivity
+
+
 }

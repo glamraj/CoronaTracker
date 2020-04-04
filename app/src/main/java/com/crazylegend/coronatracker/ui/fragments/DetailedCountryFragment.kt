@@ -1,4 +1,4 @@
-package com.crazylegend.coronatracker.ui
+package com.crazylegend.coronatracker.ui.fragments
 
 import android.os.Bundle
 import android.view.View

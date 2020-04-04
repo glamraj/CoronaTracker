@@ -1,11 +1,8 @@
 package com.crazylegend.coronatracker.di.builders
 
-import com.crazylegend.coronatracker.MainActivity
-import com.crazylegend.coronatracker.WalkThroughActivity
-import com.crazylegend.coronatracker.abstracts.AbstractActivity
-import com.crazylegend.coronatracker.ui.CountriesFragment
-import com.crazylegend.coronatracker.ui.DetailedCountryFragment
-import com.crazylegend.coronatracker.ui.StatisticsFragment
+import com.crazylegend.coronatracker.ui.fragments.CountriesFragment
+import com.crazylegend.coronatracker.ui.fragments.DetailedCountryFragment
+import com.crazylegend.coronatracker.ui.fragments.StatisticsFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,4 +1,4 @@
-package com.crazylegend.coronatracker
+package com.crazylegend.coronatracker.ui.activities
 
 import android.os.Build
 import android.os.Bundle
@@ -6,12 +6,12 @@ import android.text.Html
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.HtmlCompat
+import com.crazylegend.coronatracker.R
 import com.crazylegend.coronatracker.abstracts.AbstractActivity
 import com.crazylegend.coronatracker.databinding.ActivityWalkthroughBinding
+import com.crazylegend.coronatracker.utils.walkThroughShown
 import com.crazylegend.kotlinextensions.activity.launchActivityAndFinish
 import com.crazylegend.kotlinextensions.context.getCompatColor
-import com.crazylegend.kotlinextensions.log.debug
-import com.crazylegend.kotlinextensions.sharedprefs.putBoolean
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.invisible
 import com.crazylegend.kotlinextensions.views.setOnClickListenerCooldown
@@ -34,26 +34,39 @@ class WalkThroughActivity : AbstractActivity() {
     }
 
     private fun setupUI(newValue: Int) {
-        debug("NEW VALUE $newValue")
         when (newValue) {
             0 -> {
+                binding.title.text = getString(R.string.know_how_it_spreads)
+                binding.text.text = getString(R.string.step1_text)
+                binding.image.setImageResource(R.drawable.step_1)
                 binding.forward.setImageResource(R.drawable.ic_forward)
                 binding.back.invisible()
             }
             1 -> {
+                binding.title.text = getString(R.string.take_steps_to_protect_yourself)
+                binding.text.text = getString(R.string.step2_text)
+                binding.image.setImageResource(R.drawable.step_2)
                 binding.back.visible()
                 binding.forward.setImageResource(R.drawable.ic_forward)
             }
             2 -> {
+                binding.title.text = getString(R.string.avoid_close_contact)
+                binding.text.text = getString(R.string.steps_text)
+                binding.image.setImageResource(R.drawable.step_3)
                 binding.back.visible()
                 binding.forward.setImageResource(R.drawable.ic_forward)
-
             }
             3 -> {
+                binding.title.text = getString(R.string.take_steps_to_protect_yourself)
+                binding.text.text = getString(R.string.step4_text)
+                binding.image.setImageResource(R.drawable.step_4)
                 binding.back.visible()
                 binding.forward.setImageResource(R.drawable.ic_forward)
             }
             MAX_SCREENS -> {
+                binding.title.text = getString(R.string.clean_disenfect)
+                binding.text.text = getString(R.string.step5_text)
+                binding.image.setImageResource(R.drawable.step_5)
                 binding.forward.setImageResource(R.drawable.ic_check)
             }
         }
@@ -63,6 +76,7 @@ class WalkThroughActivity : AbstractActivity() {
         super.onCreate(savedInstanceState)
 
         addBottomDots(0)
+        setupUI(0)
 
         binding.forward.setOnClickListener {
             if (currentPage == MAX_SCREENS) {
@@ -82,6 +96,7 @@ class WalkThroughActivity : AbstractActivity() {
     }
 
     private fun openMainActivity() {
+        defaultPrefs.walkThroughShown()
         launchActivityAndFinish<MainActivity>()
     }
 

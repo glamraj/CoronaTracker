@@ -8,6 +8,7 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/walkThroughBGColor"
         app:cardCornerRadius="16dp"
         app:cardUseCompatPadding="true">
 
@@ -18,19 +19,19 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
+                android:gravity="center_horizontal"
+                android:textSize="24sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="Coronavirus cases"/>
+                android:textStyle="bold"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:padding="10dp"
-                android:text="962,882"/>
+                android:gravity="center_horizontal"
+                android:textSize="18sp"/>
 
         </LinearLayout>
 
