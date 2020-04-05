@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Singleton
 
 
@@ -19,5 +20,7 @@ object ApplicationModule {
     @Singleton
     fun defaultPrefs(application: Application): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(application)
 
+    @Provides
+    fun compositeDisposable() = CompositeDisposable()
 
 }

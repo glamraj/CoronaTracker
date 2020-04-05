@@ -1,20 +1,18 @@
 package com.crazylegend.coronatracker.vms
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.crazylegend.coronatracker.abstracts.AbstractAVM
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.kotlinextensions.collections.second
 import com.crazylegend.kotlinextensions.livedata.switchMapSearchAPI
 import com.crazylegend.kotlinextensions.retrofit.*
-import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
 import com.crazylegend.kotlinextensions.rx.mainThreadScheduler
 import com.crazylegend.kotlinextensions.rx.singleFrom
 import com.crazylegend.kotlinextensions.tryOrPrint
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -23,17 +21,14 @@ import org.jsoup.nodes.Document
 /**
  * Created by crazy on 3/29/20 to long live and prosper !
  */
-class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
-    private val searchquery:MutableLiveData<String> = MutableLiveData()
-
-    private val compositeDisposable = CompositeDisposable()
+class MainActivityViewModel(application: Application) : AbstractAVM(application) {
+    private val searchQuery: MutableLiveData<String> = MutableLiveData()
 
     private val coronaListData: MutableLiveData<RetrofitResult<List<CoronaModel>>> = MutableLiveData()
     val coronaList: LiveData<RetrofitResult<List<CoronaModel>>> = coronaListData
 
     private val filteredCoronaListData: MutableLiveData<List<CoronaModel>> = MutableLiveData()
-    val filteredCoronaList =  filteredCoronaListData.switchMapSearchAPI(searchquery, "country", coronaListData)
-
+    val filteredCoronaList = filteredCoronaListData.switchMapSearchAPI(searchQuery, "country", coronaListData)
 
     private val footerData: MutableLiveData<CoronaModel> = MutableLiveData()
     val footer: LiveData<CoronaModel> = footerData
@@ -92,7 +87,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 seriousCritical = headerElements?.getOrNull(7)?.text().orEmpty(),
                 totCasesPerMPopulation = headerElements?.getOrNull(8)?.text().orEmpty(),
                 deathsPerMPopulation = headerElements?.getOrNull(9)?.text().orEmpty(),
-                firstCaseDate = headerElements?.getOrNull(10)?.text().orEmpty()
+                totalTests = headerElements?.getOrNull(10)?.text().orEmpty(),
+                testsPerMPopulation = headerElements?.getOrNull(11)?.text().orEmpty()
         )
 
         val tableList = tableElements?.map { country ->
@@ -114,7 +110,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                     seriousCritical = properties.getOrNull(7)?.text().orEmpty(),
                     totCasesPerMPopulation = properties.getOrNull(8)?.text().orEmpty(),
                     deathsPerMPopulation = properties.getOrNull(9)?.text().orEmpty(),
-                    firstCaseDate = properties.getOrNull(10)?.text().orEmpty()
+                    totalTests = properties.getOrNull(10)?.text().orEmpty(),
+                    testsPerMPopulation = properties.getOrNull(11)?.text().orEmpty()
             )
             coronaModel
         }?.sortedByDescending { it.totalCases.replace(",", "").toInt() } ?: emptyList()
@@ -138,7 +135,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                 seriousCritical = footerElements?.getOrNull(7)?.text().orEmpty(),
                 totCasesPerMPopulation = footerElements?.getOrNull(8)?.text().orEmpty(),
                 deathsPerMPopulation = footerElements?.getOrNull(9)?.text().orEmpty(),
-                firstCaseDate = footerElements?.getOrNull(10)?.text().orEmpty()
+                totalTests = footerElements?.getOrNull(10)?.text().orEmpty(),
+                testsPerMPopulation = footerElements?.getOrNull(11)?.text().orEmpty()
         )
 
         footerData.postValue(footer)
@@ -157,13 +155,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         casesListData.postValue(casesList)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clearAndDispose()
-    }
-
     fun filter(query: String) {
-        searchquery.value = query
+        searchQuery.value = query
     }
 
 

@@ -30,14 +30,12 @@ import com.crazylegend.kotlinextensions.putInMemory
 import com.crazylegend.kotlinextensions.recyclerview.clickListeners.forItemClickListenerDSL
 import com.crazylegend.kotlinextensions.retrofit.handle
 import com.crazylegend.kotlinextensions.rx.bindings.textChanges
-import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import com.crazylegend.kotlinextensions.transition.StaggerTransition
 import com.crazylegend.kotlinextensions.transition.interpolators.FAST_OUT_SLOW_IN
 import com.crazylegend.kotlinextensions.transition.utils.LARGE_EXPAND_DURATION
 import com.crazylegend.kotlinextensions.transition.utils.plusAssign
 import com.crazylegend.kotlinextensions.transition.utils.transitionSequential
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -73,20 +71,14 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
 
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
-    private val compositeDisposable by lazy {
-        CompositeDisposable()
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.clearAndDispose()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
 
         val searchItem = menu.findItem(R.id.app_bar_search)
+
 
         searchItem?.apply {
             searchView = this.actionView as SearchView?

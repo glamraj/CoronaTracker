@@ -19,5 +19,12 @@
     <string name="last_updated">Last updated</string>
     <string name="world">World</string>
     <string name="search">Search</string>
-    <string name="search_by_country_name">Search by country...</string>
+    <string name="search_by_country_name">Search by country…</string>
+    <string name="active_cases">Active cases</string>
+    <string name="seriously_critical">Seriously critical</string>
+    <string name="total_cases_per1m">Total Cases/1M</string>
+    <string name="total_deaths_per1m">Total Deaths/1M</string>
+    <string name="total_tests">Total tests</string>
+    <string name="total_tests_per1m">Total Tests/1M</string>
+    <string name="not_available">N/A</string>
 </resources>

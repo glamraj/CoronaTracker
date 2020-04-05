@@ -1,13 +1,11 @@
 package com.crazylegend.coronatracker.abstracts
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.crazylegend.kotlinextensions.log.debug
-import dagger.android.AndroidInjection
+import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -17,9 +15,18 @@ import javax.inject.Inject
 abstract class AbstractFragment(contentLayoutId: Int) : Fragment(contentLayoutId) {
     abstract val binding: ViewBinding
 
+    @Inject
+    lateinit var compositeDisposable: CompositeDisposable
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clearAndDispose()
     }
 
 }

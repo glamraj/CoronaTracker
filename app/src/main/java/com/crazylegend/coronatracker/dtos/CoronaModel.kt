@@ -30,7 +30,8 @@ data class CoronaModel(
     val seriousCritical:String,
     val totCasesPerMPopulation:String,
     val deathsPerMPopulation:String,
-    val firstCaseDate:String
+    val totalTests:String,
+    val testsPerMPopulation:String
 ):Parcelable {
 
     val totalCasesAndDeaths get() = "Total cases ${totalCases}\nTotal deaths $totalDeaths"

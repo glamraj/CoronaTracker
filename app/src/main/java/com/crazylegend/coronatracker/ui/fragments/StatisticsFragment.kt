@@ -12,7 +12,9 @@ import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.vms.MainActivityViewModel
 import com.crazylegend.kotlinextensions.fragments.compatColor
 import com.crazylegend.kotlinextensions.livedata.sharedProvider
+import com.crazylegend.kotlinextensions.orElse
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
+import com.google.android.material.textview.MaterialTextView
 
 
 /**
@@ -28,12 +30,13 @@ class StatisticsFragment : AbstractFragment(R.layout.fragment_statistics) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.footer.observe(viewLifecycleOwner, Observer {
-            handleFooter(it)
-        })
-
         viewModel.casesList.observe(viewLifecycleOwner, Observer {
             handleCases(it)
+        })
+
+
+        viewModel.footer.observe(viewLifecycleOwner, Observer {
+            handleFooter(it)
         })
 
         viewModel.lastUpdated.observe(viewLifecycleOwner, Observer {
@@ -44,24 +47,24 @@ class StatisticsFragment : AbstractFragment(R.layout.fragment_statistics) {
     }
 
     private fun handleLastUpdated(lastUpdated: String?) {
-        val layout = layoutInflater.inflate(R.layout.layout_card_stats, null)
-        val cardBinding = LayoutCardStatsBinding.bind(layout)
-        cardBinding.title.text = getString(R.string.last_updated)
-        cardBinding.title.setTextColor(compatColor(R.color.secondaryText))
-        cardBinding.subtitle.text = lastUpdated
-        binding.layout.addView(cardBinding.root)
+        generateCard(onTitle = {
+            text = getString(R.string.last_updated)
+            setTextColor(compatColor(R.color.secondaryText))
+        }, onSubtitle = {
+            text = lastUpdated
+        })
     }
 
     private fun handleCases(list: List<String>?) {
         if (list.isNullOrEmpty()) {
-            val layout = layoutInflater.inflate(R.layout.layout_card_stats, null)
-            val cardBinding = LayoutCardStatsBinding.bind(layout)
+            generateCard(onTitle = {
+                text = getString(R.string.no_cases_returned)
+            }, onSubtitle = {
+                text = getString(R.string.try_again_later)
+            })
 
-            cardBinding.title.text = getString(R.string.no_cases_returned)
-            cardBinding.subtitle.text = getString(R.string.try_again_later)
-            binding.layout.addView(cardBinding.root)
         } else {
-            list.forEachIndexed { index, text ->
+            list.forEachIndexed { index, listText ->
                 val color = when (index) {
                     0 -> {
                         compatColor(R.color.casesColor)
@@ -76,24 +79,77 @@ class StatisticsFragment : AbstractFragment(R.layout.fragment_statistics) {
                         compatColor(R.color.secondaryText)
                     }
                 }
-                val layout = layoutInflater.inflate(R.layout.layout_card_stats, null)
-                val cardBinding = LayoutCardStatsBinding.bind(layout)
-                val title = text.substringBefore(":")
-                val numbers = text.substringAfter(": ")
-                cardBinding.title.text = title
-                cardBinding.subtitle.text = numbers
-                cardBinding.title.setTextColor(color)
-                binding.layout.addView(cardBinding.root)
+                val title = listText.substringBefore(":")
+                val numbers = listText.substringAfter(": ")
+                generateCard(onTitle = {
+                    text = title
+                    setTextColor(color)
+                }, onSubtitle = {
+                    text = numbers
+                })
             }
         }
     }
 
-    private fun handleFooter(model: CoronaModel?) {
+    private fun generateCard(onTitle: MaterialTextView.() -> Unit, onSubtitle: MaterialTextView.() -> Unit) {
         val layout = layoutInflater.inflate(R.layout.layout_card_stats, null)
         val cardBinding = LayoutCardStatsBinding.bind(layout)
-        cardBinding.title.text = getString(R.string.world)
-        cardBinding.subtitle.text = model?.newCasesAndDeathsSpan(requireContext())
+        cardBinding.title.onTitle()
+        cardBinding.subtitle.onSubtitle()
         binding.layout.addView(cardBinding.root)
+    }
+
+    private fun handleFooter(model: CoronaModel?) {
+        if (model == null) return
+        generateCard(onTitle = {
+            text = getString(R.string.world)
+        }, onSubtitle = {
+            text = model.newCasesAndDeathsSpan(requireContext())
+        })
+
+        generateCard(onTitle = {
+            text = getString(R.string.active_cases)
+            setTextColor(compatColor(R.color.secondaryText))
+        }, onSubtitle = {
+            text = model.activeCases
+        })
+
+        generateCard(onTitle = {
+            text = getString(R.string.seriously_critical)
+            setTextColor(compatColor(R.color.deathsColor))
+        }, onSubtitle = {
+            text = model.seriousCritical
+        })
+
+        generateCard(onTitle = {
+            text = getString(R.string.total_cases_per1m)
+            setTextColor(compatColor(R.color.casesColor))
+        }, onSubtitle = {
+            text = model.totCasesPerMPopulation
+        })
+
+
+        generateCard(onTitle = {
+            text = getString(R.string.total_deaths_per1m)
+            setTextColor(compatColor(R.color.deathsColor))
+        }, onSubtitle = {
+            text = model.deathsPerMPopulation
+        })
+
+
+        generateCard(onTitle = {
+            text = getString(R.string.total_tests)
+        }, onSubtitle = {
+            text = model.totalTests.orElse(getString(R.string.not_available))
+        })
+
+        generateCard(onTitle = {
+            text = getString(R.string.total_tests_per1m)
+        }, onSubtitle = {
+            text = model.testsPerMPopulation.orElse(getString(R.string.not_available))
+        })
+
+
     }
 
 }
