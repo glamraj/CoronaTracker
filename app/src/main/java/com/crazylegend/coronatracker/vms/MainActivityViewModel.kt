@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.kotlinextensions.collections.second
+import com.crazylegend.kotlinextensions.livedata.switchMapSearchAPI
 import com.crazylegend.kotlinextensions.retrofit.*
 import com.crazylegend.kotlinextensions.rx.clearAndDispose
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
@@ -23,6 +24,7 @@ import org.jsoup.nodes.Document
  * Created by crazy on 3/29/20 to long live and prosper !
  */
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+    private val searchquery:MutableLiveData<String> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -30,7 +32,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val coronaList: LiveData<RetrofitResult<List<CoronaModel>>> = coronaListData
 
     private val filteredCoronaListData: MutableLiveData<List<CoronaModel>> = MutableLiveData()
-    val filteredCoronaList: LiveData<List<CoronaModel>> = filteredCoronaListData
+    val filteredCoronaList =  filteredCoronaListData.switchMapSearchAPI(searchquery, "country", coronaListData)
 
 
     private val footerData: MutableLiveData<CoronaModel> = MutableLiveData()
@@ -45,6 +47,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     init {
         fetchData()
+
     }
 
     fun fetchData() {
@@ -160,8 +163,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun filter(query: String) {
-        filteredCoronaListData.value = coronaListData.getSuccess?.filter {
-            it.country.contains(query, true)
-        }
+        searchquery.value = query
     }
+
+
 }
