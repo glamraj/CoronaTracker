@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/detailedCountryFragment"
         android:name="com.crazylegend.coronatracker.ui.fragments.DetailedCountryFragment"
-        android:label="Detailed country"
+        android:label="Country information"
         tools:layout="@layout/fragment_detailed_country" >
         <argument
             android:name="model"

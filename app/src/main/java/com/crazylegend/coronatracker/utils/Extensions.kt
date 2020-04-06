@@ -15,5 +15,10 @@ fun countryFlag(countryName: String): String {
     return "https://www.countryflags.io/${getCountryCode(countryName)}/flat/64.png"
 }
 
+fun manualCountryFlag(countryName: String?):String?{
+    return if (countryName==null) null
+    else "https://www.countryflags.io/$countryName/flat/64.png"
+}
+
 fun SharedPreferences.shouldShowWalkThrough() = getBoolean(WalkThroughActivity::class.java.simpleName, true)
 fun SharedPreferences.walkThroughShown() = putBoolean(WalkThroughActivity::class.java.simpleName, false)

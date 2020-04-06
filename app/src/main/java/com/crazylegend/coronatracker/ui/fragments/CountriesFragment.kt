@@ -20,9 +20,10 @@ import com.crazylegend.coronatracker.adapters.CoronaPlaceHolderAdapter
 import com.crazylegend.coronatracker.adapters.CoronaViewHolder
 import com.crazylegend.coronatracker.consts.SEARCH_QUERY_KEY
 import com.crazylegend.coronatracker.databinding.FragmentCountriesBinding
+import com.crazylegend.coronatracker.databinding.ItemviewCoronaBinding
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.vms.MainActivityViewModel
-import com.crazylegend.kotlinextensions.abstracts.AbstractListAdapter
+import com.crazylegend.kotlinextensions.abstracts.AbstractViewBindingAdapter
 import com.crazylegend.kotlinextensions.getFromMemory
 import com.crazylegend.kotlinextensions.isNotNullOrEmpty
 import com.crazylegend.kotlinextensions.livedata.sharedProvider
@@ -36,6 +37,7 @@ import com.crazylegend.kotlinextensions.transition.utils.LARGE_EXPAND_DURATION
 import com.crazylegend.kotlinextensions.transition.utils.plusAssign
 import com.crazylegend.kotlinextensions.transition.utils.transitionSequential
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
+import com.crazylegend.kotlinextensions.views.asSearchView
 import javax.inject.Inject
 
 
@@ -48,7 +50,7 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
     private val viewModel by lazy { sharedProvider<MainActivityViewModel>() }
 
     @Inject
-    lateinit var coronaAdapter: AbstractListAdapter<CoronaModel, CoronaViewHolder>
+    lateinit var coronaAdapter: AbstractViewBindingAdapter<CoronaModel, CoronaViewHolder, ItemviewCoronaBinding>
 
     @Inject
     lateinit var placeHolderAdapter: CoronaPlaceHolderAdapter
@@ -70,23 +72,15 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
     }
 
     private var searchView: SearchView? = null
-    private var searchQuery: String? = null
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
-
         val searchItem = menu.findItem(R.id.app_bar_search)
-
-
-        searchItem?.apply {
-            searchView = this.actionView as SearchView?
-        }
+        searchView = searchItem.asSearchView()
         searchView?.queryHint = getString(R.string.search_by_country_name)
-
-        searchView?.textChanges(compositeDisposable = compositeDisposable) {
-            searchQuery = it
+        searchView?.textChanges(compositeDisposable = compositeDisposable, skipInitialValue = true) {
             viewModel.filter(it)
         }
 

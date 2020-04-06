@@ -1,6 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/flag"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/colorAccent"
+                android:textSize="28sp"
+                android:textStyle="bold|italic"/>
+
+            <include
+                android:id="@+id/totalCases"
+                layout="@layout/layout_card_stats"/>
+
+             <include
+                android:id="@+id/totalDeaths"
+                layout="@layout/layout_card_stats"/>
+
+             <include
+                android:id="@+id/totalRecoveries"
+                layout="@layout/layout_card_stats"/>
+
+             <include
+                android:id="@+id/activeCases"
+                layout="@layout/layout_card_stats"/>
+
+            <include
+                android:id="@+id/seriouslyCritical"
+                layout="@layout/layout_card_stats"/>
+
+             <include
+                android:id="@+id/totalTests"
+                layout="@layout/layout_card_stats"/>
+
+            <include
+                android:id="@+id/mildCondition"
+                layout="@layout/layout_card_stats"
+                android:visibility="gone"/>
+
+            <com.crazylegend.kotlinextensions.ui.ColorProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:elevation="2dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:progressColor="@color/colorAccent"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cities"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fadeScrollbars="true"
+                android:paddingTop="@dimen/spacing_small"
+                android:paddingBottom="65dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:id="@+id/scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_scrim"
+        android:visibility="invisible"
+        app:layout_behavior="@string/fab_transformation_scrim_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/spacing_medium"
+        android:src="@drawable/ic_news"
+        app:backgroundTint="@color/colorAccent"
+        app:elevation="@dimen/fab_elevation"
+        app:tint="@color/iconsColor" />
+
+    <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+        android:id="@+id/sheetNews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/spacing_medium"
+        android:background="?attr/colorSurface"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/bgColor"
+        app:elevation="@dimen/fab_elevation"
+        app:layout_behavior="@string/fab_transformation_sheet_behavior"
+        tools:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="true"
+            android:paddingTop="@dimen/spacing_small"
+            android:paddingBottom="@dimen/spacing_small"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

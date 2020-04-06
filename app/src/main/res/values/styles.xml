@@ -7,6 +7,11 @@
         <item name="colorSecondary">@color/secondaryText</item>
         <item name="android:windowBackground">@color/bgColor</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="colorOnPrimary">@color/primaryText</item>
+        <item name="colorOnSecondary">@color/primaryLight</item>
+        <item name="colorOnError">@color/deathsColor</item>
+        <item name="colorOnSurface">@color/secondaryText</item>
+        <item name="colorOnBackground">@color/primaryLight</item>
     </style>
 
     <style name="AppThemeNoBar" parent="Theme.MaterialComponents.Light.NoActionBar">

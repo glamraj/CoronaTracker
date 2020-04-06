@@ -20,26 +20,72 @@ import kotlinx.android.parcel.Parcelize
 @Keep
 @Parcelize
 data class CoronaModel(
-    val country: String,
-    val totalCases: String,
-    val newCases:String,
-    val totalDeaths:String,
-    val newDeaths:String,
-    val totalRecovered:String,
-    val activeCases:String,
-    val seriousCritical:String,
-    val totCasesPerMPopulation:String,
-    val deathsPerMPopulation:String,
-    val totalTests:String,
-    val testsPerMPopulation:String
-):Parcelable {
+        val countryName: String,
+        val totalCases: String,
+        val newCases: String,
+        val totalDeaths: String,
+        val newDeaths: String,
+        val totalRecovered: String,
+        val activeCases: String,
+        val seriousCritical: String,
+        val totCasesPerMPopulation: String,
+        val deathsPerMPopulation: String,
+        val totalTests: String,
+        val testsPerMPopulation: String,
+        val hideFlag:Boolean = false
+) : Parcelable {
+
+    val countryCode: String
+        get() {
+            return when (countryName) {
+                "United States" -> "us"
+                "S. Korea" -> "south-korea"
+                "North Macedonia" -> "macedonia"
+                "DRC" -> "democratic-republic-of-the-congo"
+                "St. Vincent Grenadines" -> "saint-vincent-and-the-grenadines"
+                "St. Barth" -> "saint-barthelemy"
+                "Falkland Islands" -> "falkland-islands-malvinas"
+                "UAE" -> "united-arab-emirates"
+                "CAR" -> "central-african-republic"
+                "Honk Kong" -> "china-honk-kong-sar"
+                "Czechia" -> "czech-republic"
+                else -> countryName.makeCountry()
+            }
+        }
+
+    val flagCode: String?
+        get() {
+            return when (countryName) {
+                "S. Korea" -> "KR"
+                "North Macedonia" -> "MK"
+                "Ivory Coast" -> "CI"
+                "Bosnia and Herzegovina" -> "BA"
+                "DRC" -> "CD"
+                "Macao" -> "MO"
+                "Saint Martin" -> "MF"
+                "Myanmar" -> "MM"
+                "Antigua and Barbuda" -> "AG"
+                "Saint Lucia" -> "LC"
+                "Saint Kitts and Nevis" -> "KN"
+                "St. Vincent Grenadines" -> "VC"
+                "St. Barth" -> "BL"
+                "Saint Pierre Miquelon" -> "PM"
+                "Turks and Caicos" -> "TC"
+                "Falkland Islands" -> "FK"
+                "Faeroe Islands" -> "FO"
+                "Cabo Verde" -> "CV"
+                "CAR" -> "CF"
+                "Trinidad and Tobago" -> "TT"
+                else -> null
+            }
+        }
 
     val totalCasesAndDeaths get() = "Total cases ${totalCases}\nTotal deaths $totalDeaths"
     val newCasesAndDeaths get() = "${newCases.ifEmpty { "0" }} cases\n${newDeaths.ifEmpty { "0" }} deaths"
 
     fun newCasesAndDeathsSpan(context: Context) = SpannableString(newCasesAndDeaths).apply {
         setSpan(ForegroundColorSpan(context.getCompatColor(R.color.casesColor)), 0, newCasesAndDeaths.indexOfFirst { it.isWhitespace() }, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        setSpan(ForegroundColorSpan(context.getColorCompat(R.color.deathsColor)), newCasesAndDeaths.indexOf("\n"), newCasesAndDeaths.indexOfLast { it.isDigit() }+1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        setSpan(ForegroundColorSpan(context.getColorCompat(R.color.deathsColor)), newCasesAndDeaths.indexOf("\n"), newCasesAndDeaths.indexOfLast { it.isDigit() } + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
     }
 
     fun casesAndDeathsSpan(context: Context) = SpannableString(totalCasesAndDeaths).apply {
@@ -47,4 +93,9 @@ data class CoronaModel(
         setSpan(ForegroundColorSpan(context.getCompatColor(R.color.deathsColor)), totalCasesAndDeaths.indexOfLast { it.isWhitespace() }, totalCasesAndDeaths.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
     }
 
+
+    private fun String.makeCountry(): String =
+            replace(" ", "-").toLowerCase()
+
 }
+

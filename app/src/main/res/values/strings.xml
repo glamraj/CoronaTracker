@@ -27,4 +27,8 @@
     <string name="total_tests">Total tests</string>
     <string name="total_tests_per1m">Total Tests/1M</string>
     <string name="not_available">N/A</string>
+    <string name="total_cases">Total cases</string>
+    <string name="total_deaths">Total deaths</string>
+    <string name="total_recoveries">Total recoveries</string>
+    <string name="mild_condition">Mild condition</string>
 </resources>

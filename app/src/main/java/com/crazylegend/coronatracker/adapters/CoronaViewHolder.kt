@@ -11,18 +11,20 @@ import com.crazylegend.coronatracker.R
 import com.crazylegend.coronatracker.databinding.ItemviewCoronaBinding
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.utils.countryFlag
+import com.crazylegend.coronatracker.utils.manualCountryFlag
 import com.crazylegend.kotlinextensions.glide.loadImgNoCache
 import com.crazylegend.kotlinextensions.recyclerview.context
-import com.crazylegend.kotlinextensions.viewBinding.viewBinding
+import com.crazylegend.kotlinextensions.recyclerview.getDrawable
 import com.crazylegend.kotlinextensions.views.dp
+import com.crazylegend.kotlinextensions.views.gone
 import com.crazylegend.kotlinextensions.views.setPrecomputedText
+import com.crazylegend.kotlinextensions.views.visible
 
 
 /**
  * Created by crazy on 3/29/20 to long live and prosper !
  */
-class CoronaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val binding by viewBinding(ItemviewCoronaBinding::bind)
+class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerView.ViewHolder(binding.root) {
 
     private val FADE_DURATION = 1000L
 
@@ -36,8 +38,21 @@ class CoronaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: CoronaModel) {
         animation.end()
-        binding.flag.loadImgNoCache(countryFlag(item.country))
-        binding.country.setPrecomputedText(item.country)
+        if (item.hideFlag){
+            binding.flag.gone()
+            binding.country.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                marginStart = 16.dp
+            }
+            binding.totalCasesAndDeaths.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                marginStart = 16.dp
+            }
+
+        } else {
+            binding.flag.visible()
+            val countryFlag = manualCountryFlag(item.flagCode)?: countryFlag(item.countryName)
+            binding.flag.loadImgNoCache(countryFlag, getDrawable(R.drawable.ic_launcher_foreground)!!, getDrawable(R.drawable.ic_launcher_foreground)!!)
+        }
+        binding.country.setPrecomputedText(item.countryName)
         binding.totalCasesAndDeaths.text = item.casesAndDeathsSpan(context)
         binding.todayCasesAndDeaths.text = item.newCasesAndDeathsSpan(context)
     }

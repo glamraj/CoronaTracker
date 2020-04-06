@@ -126,5 +126,5 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     //my
-    implementation 'com.github.CraZyLegenD:Set-Of-Useful-Kotlin-Extensions-and-Helpers:1.0.89.44'
+    implementation 'com.github.CraZyLegenD:Set-Of-Useful-Kotlin-Extensions-and-Helpers:1.0.89.45'
 }

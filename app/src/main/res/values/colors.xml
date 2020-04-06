@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#607D8B</color>
+    <color name="colorPrimary">#8E949E</color>
+    <color name="colorPrimaryDark">#757B85</color>
+    <color name="colorAccent">#9E8E9C</color>
     <color name="primaryLight">#C5CAE9</color>
     <color name="iconsColor">#FFFFFF</color>
-    <color name="primaryText">#212121</color>
+    <color name="primaryText">#9E988E</color>
     <color name="secondaryText">#757575</color>
     <color name="dividerColor">#BDBDBD</color>
     <color name="walkThroughBGColor">#323a46</color>
@@ -16,4 +16,6 @@
     <color name="casesColor">#21afdd</color>
     <color name="deathsColor">#ff5b5b</color>
     <color name="recoveriesColor">#10c469</color>
+    <color name="dark_scrim">#66333333</color>
+
 </resources>

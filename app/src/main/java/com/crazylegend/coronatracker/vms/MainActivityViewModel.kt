@@ -7,7 +7,6 @@ import com.crazylegend.coronatracker.abstracts.AbstractAVM
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.kotlinextensions.collections.second
-import com.crazylegend.kotlinextensions.livedata.switchMapSearchAPI
 import com.crazylegend.kotlinextensions.retrofit.*
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
 import com.crazylegend.kotlinextensions.rx.mainThreadScheduler
@@ -22,13 +21,12 @@ import org.jsoup.nodes.Document
  * Created by crazy on 3/29/20 to long live and prosper !
  */
 class MainActivityViewModel(application: Application) : AbstractAVM(application) {
-    private val searchQuery: MutableLiveData<String> = MutableLiveData()
 
     private val coronaListData: MutableLiveData<RetrofitResult<List<CoronaModel>>> = MutableLiveData()
     val coronaList: LiveData<RetrofitResult<List<CoronaModel>>> = coronaListData
 
     private val filteredCoronaListData: MutableLiveData<List<CoronaModel>> = MutableLiveData()
-    val filteredCoronaList = filteredCoronaListData.switchMapSearchAPI(searchQuery, "country", coronaListData)
+    val filteredCoronaList : LiveData<List<CoronaModel>> = filteredCoronaListData
 
     private val footerData: MutableLiveData<CoronaModel> = MutableLiveData()
     val footer: LiveData<CoronaModel> = footerData
@@ -66,30 +64,12 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
     private fun handleTable(it: Document) {
 
         val table = it.getElementById("main_table_countries_today")
-        val headerElements =
-                table.select("thead")?.firstOrNull()?.select("tr")?.firstOrNull()?.select("th")
-
         val tableSelection = table.select("tbody")
         val tableElements = tableSelection.firstOrNull()?.select("tr")
         val footerElements = tableSelection.second()?.select("tr")?.select("td")
         tryOrPrint {
             tableElements?.removeAt(0)
         }
-
-        val header = CoronaModel(
-                country = headerElements?.getOrNull(0)?.text().orEmpty(),
-                totalCases = headerElements?.getOrNull(1)?.text().orEmpty(),
-                newCases = headerElements?.getOrNull(2)?.text().orEmpty(),
-                totalDeaths = headerElements?.getOrNull(3)?.text().orEmpty(),
-                newDeaths = headerElements?.getOrNull(4)?.text().orEmpty(),
-                totalRecovered = headerElements?.getOrNull(5)?.text().orEmpty(),
-                activeCases = headerElements?.getOrNull(6)?.text().orEmpty(),
-                seriousCritical = headerElements?.getOrNull(7)?.text().orEmpty(),
-                totCasesPerMPopulation = headerElements?.getOrNull(8)?.text().orEmpty(),
-                deathsPerMPopulation = headerElements?.getOrNull(9)?.text().orEmpty(),
-                totalTests = headerElements?.getOrNull(10)?.text().orEmpty(),
-                testsPerMPopulation = headerElements?.getOrNull(11)?.text().orEmpty()
-        )
 
         val tableList = tableElements?.map { country ->
             val properties = country.select("td")
@@ -100,7 +80,7 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
                 else -> properties.getOrNull(0)?.text().orEmpty()
             }
             val coronaModel = CoronaModel(
-                    country = countryName,
+                    countryName = countryName,
                     totalCases = properties.getOrNull(1)?.text().orEmpty(),
                     newCases = properties.getOrNull(2)?.text().orEmpty(),
                     totalDeaths = properties.getOrNull(3)?.text().orEmpty(),
@@ -125,7 +105,7 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
         }
 
         val footer = CoronaModel(
-                country = footerElements?.getOrNull(0)?.text().orEmpty(),
+                countryName = footerElements?.getOrNull(0)?.text().orEmpty(),
                 totalCases = footerElements?.getOrNull(1)?.text().orEmpty(),
                 newCases = footerElements?.getOrNull(2)?.text().orEmpty(),
                 totalDeaths = footerElements?.getOrNull(3)?.text().orEmpty(),
@@ -156,7 +136,11 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
     }
 
     fun filter(query: String) {
-        searchQuery.value = query
+        if (query.isBlank()){
+            filteredCoronaListData.value = coronaListData.getSuccess
+        } else {
+            filteredCoronaListData.value = coronaListData.getSuccess?.filter { it.countryName.contains(query, true) }
+        }
     }
 
 
