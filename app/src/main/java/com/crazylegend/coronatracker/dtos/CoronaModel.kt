@@ -80,7 +80,7 @@ data class CoronaModel(
             }
         }
 
-    val totalCasesAndDeaths get() = "Total cases ${totalCases}\nTotal deaths $totalDeaths"
+    val totalCasesAndDeaths get() = "Total cases ${totalCases.ifEmpty { "0" }}\nTotal deaths ${totalDeaths.ifEmpty { "0" }}"
     val newCasesAndDeaths get() = "${newCases.ifEmpty { "0" }} cases\n${newDeaths.ifEmpty { "0" }} deaths"
 
     fun newCasesAndDeathsSpan(context: Context) = SpannableString(newCasesAndDeaths).apply {

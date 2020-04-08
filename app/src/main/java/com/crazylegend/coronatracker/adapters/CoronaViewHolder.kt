@@ -15,6 +15,7 @@ import com.crazylegend.coronatracker.utils.manualCountryFlag
 import com.crazylegend.kotlinextensions.glide.loadImgNoCache
 import com.crazylegend.kotlinextensions.recyclerview.context
 import com.crazylegend.kotlinextensions.recyclerview.getDrawable
+import com.crazylegend.kotlinextensions.recyclerview.getString
 import com.crazylegend.kotlinextensions.views.dp
 import com.crazylegend.kotlinextensions.views.gone
 import com.crazylegend.kotlinextensions.views.setPrecomputedText
@@ -55,6 +56,7 @@ class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerVie
         binding.country.setPrecomputedText(item.countryName)
         binding.totalCasesAndDeaths.text = item.casesAndDeathsSpan(context)
         binding.todayCasesAndDeaths.text = item.newCasesAndDeathsSpan(context)
+        binding.todayText.text = getString(R.string.today)
     }
 
     fun showPlaceHolder() {
@@ -68,9 +70,11 @@ class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerVie
         binding.totalCasesAndDeaths.text = null
         binding.country.text = null
         binding.todayCasesAndDeaths.text = null
+        binding.todayText.text = null
         binding.totalCasesAndDeaths.setBackgroundResource(R.drawable.text_placeholder)
         binding.country.setBackgroundResource(R.drawable.text_placeholder)
         binding.todayCasesAndDeaths.setBackgroundResource(R.drawable.text_placeholder)
+        binding.todayText.setBackgroundResource(R.drawable.text_placeholder)
 
         binding.flag.updateLayoutParams<ConstraintLayout.LayoutParams> {
             marginStart = 16.dp
@@ -86,6 +90,11 @@ class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerVie
         binding.todayCasesAndDeaths.updateLayoutParams<ConstraintLayout.LayoutParams> {
             width = 80.dp
             height = 30.dp
+        }
+
+        binding.todayText.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            width = 50.dp
+            height = 20.dp
         }
 
         binding.country.updateLayoutParams<ConstraintLayout.LayoutParams> {

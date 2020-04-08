@@ -27,6 +27,7 @@ import com.crazylegend.kotlinextensions.recyclerview.clickListeners.forItemClick
 import com.crazylegend.kotlinextensions.retrofit.handle
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.gone
+import com.crazylegend.kotlinextensions.views.setOnClickListenerCooldown
 import com.crazylegend.kotlinextensions.views.visible
 import javax.inject.Inject
 
@@ -69,7 +70,7 @@ class DetailedCountryFragment : AbstractFragment(R.layout.fragment_detailed_coun
                 _, _ ->
             }, {
                 //success handle
-                newsAdapter.submitList(this)
+                setupNews(this)
             })
         })
 
@@ -116,6 +117,25 @@ class DetailedCountryFragment : AbstractFragment(R.layout.fragment_detailed_coun
                 binding.fabNews.isExpanded = false
                 requireContext().openWebPage(url)
             }
+        }
+
+        binding.closeNews.setOnClickListenerCooldown {
+            collapseNews()
+        }
+    }
+
+    private fun collapseNews(){
+        if (binding.fabNews.isExpanded) {
+            binding.fabNews.isExpanded = false
+        }
+    }
+
+    private fun setupNews(news: List<NewsModel>) {
+        if (news.isNullOrEmpty()){
+            binding.fabNews.hide()
+        } else {
+            binding.fabNews.show()
+            newsAdapter.submitList(news)
         }
     }
 

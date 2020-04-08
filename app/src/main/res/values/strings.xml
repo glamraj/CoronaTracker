@@ -31,4 +31,6 @@
     <string name="total_deaths">Total deaths</string>
     <string name="total_recoveries">Total recoveries</string>
     <string name="mild_condition">Mild condition</string>
+    <string name="today">Today</string>
+    <string name="news">News</string>
 </resources>
