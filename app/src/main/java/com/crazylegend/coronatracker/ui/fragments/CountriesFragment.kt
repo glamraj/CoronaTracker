@@ -122,9 +122,10 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
             }, { // call error
                 throwable ->
                 setupSuccess(emptyList())
+                throwable.printStackTrace()
 
             }, { // api error
-                errorBody, responseCode ->
+                _, _ ->
                 setupSuccess(emptyList())
 
             }, {
@@ -141,6 +142,8 @@ class CountriesFragment : AbstractFragment(R.layout.fragment_countries) {
         viewModel.filteredCoronaList.observe(viewLifecycleOwner, Observer {
             coronaAdapter.submitList(it)
         })
+
+        recyclerScrollBackToTop(binding.backToTop, binding.list, coronaAdapter)
     }
 
     override fun onPause() {

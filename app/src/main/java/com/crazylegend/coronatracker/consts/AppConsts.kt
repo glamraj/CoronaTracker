@@ -7,5 +7,5 @@ package com.crazylegend.coronatracker.consts
 
 
 const val PRIMARY_URL = "https://www.worldometers.info/coronavirus/"
-
+const val SCROLL_TO_TOP_VISIBILITY_THRESHOLD = 25
 const val SEARCH_QUERY_KEY = "searchQuery"
