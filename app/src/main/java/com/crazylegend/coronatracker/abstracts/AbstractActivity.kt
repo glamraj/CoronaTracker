@@ -14,6 +14,7 @@ import javax.inject.Inject
  * Created by crazy on 3/29/20 to long live and prosper !
  */
 abstract class AbstractActivity : AppCompatActivity() {
+
     abstract val binding: ViewBinding
 
     @Inject

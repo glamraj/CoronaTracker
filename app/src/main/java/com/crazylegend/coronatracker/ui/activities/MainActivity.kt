@@ -2,7 +2,6 @@ package com.crazylegend.coronatracker.ui.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -15,10 +14,7 @@ import com.crazylegend.coronatracker.vms.MainActivityViewModel
 import com.crazylegend.kotlinextensions.livedata.compatProvider
 import com.crazylegend.kotlinextensions.viewBinding.viewBinding
 import com.crazylegend.kotlinextensions.views.gone
-import com.crazylegend.kotlinextensions.views.toColorSpan
-import com.crazylegend.kotlinextensions.views.toSizeSpan
 import com.crazylegend.kotlinextensions.views.visible
-import com.google.android.material.textview.MaterialTextView
 
 class MainActivity : AbstractActivity() {
 
@@ -38,9 +34,6 @@ class MainActivity : AbstractActivity() {
         } // Else, need to wait for onRestoreInstanceState
 
     }
-    /**
-     * Called on first creation and when restoring state.
-     */
     /**
      * Called on first creation and when restoring state.
      */
@@ -94,21 +87,4 @@ class MainActivity : AbstractActivity() {
         return currentNavController?.value?.navigateUp() ?: false
     }
 
-    private fun addTextToTitleLayout(text: String?, color: Int) {
-        if (text.isNullOrEmpty()) return
-
-        val title = text.substringBefore(":")
-        val numbers = text.substringAfter(": ")
-
-        val textView = MaterialTextView(this)
-        textView.append(title.toSizeSpan(IntRange(0, title.length), 2.5f))
-        textView.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-        textView.append("\n")
-        textView.append(
-                numbers.toSizeSpan(IntRange(0, numbers.length))
-                        .toColorSpan(IntRange(0, numbers.length), color)
-        )
-        textView.maxLines = 2
-        textView.setPadding(5, 5, 5, 5)
-    }
 }
