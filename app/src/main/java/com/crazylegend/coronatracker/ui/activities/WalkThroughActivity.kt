@@ -100,8 +100,9 @@ class WalkThroughActivity : AbstractActivity() {
         launchActivityAndFinish<MainActivity>()
     }
 
+    @Suppress("DEPRECATION")
     private fun addBottomDots(currentPage: Int) {
-        val text = with(AppCompatTextView(this@WalkThroughActivity)) {
+        val inactiveText = with(AppCompatTextView(this@WalkThroughActivity)) {
             text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml("&#8226;", HtmlCompat.FROM_HTML_MODE_COMPACT)
             } else {
@@ -112,11 +113,11 @@ class WalkThroughActivity : AbstractActivity() {
             this
         }
         dots = ArrayList()
-        dots?.add(text)
-        dots?.add(text)
-        dots?.add(text)
-        dots?.add(text)
-        dots?.add(text)
+        dots?.add(inactiveText)
+        dots?.add(inactiveText)
+        dots?.add(inactiveText)
+        dots?.add(inactiveText)
+        dots?.add(inactiveText)
 
         binding.dotsLayout.removeAllViews()
         dots?.apply {

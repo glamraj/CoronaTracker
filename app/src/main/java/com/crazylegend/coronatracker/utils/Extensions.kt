@@ -1,7 +1,6 @@
 package com.crazylegend.coronatracker.utils
 
 import android.content.SharedPreferences
-import com.crazylegend.coronatracker.ui.activities.WalkThroughActivity
 import com.crazylegend.kotlinextensions.misc.getCountryCode
 import com.crazylegend.kotlinextensions.sharedprefs.putBoolean
 
@@ -20,5 +19,6 @@ fun manualCountryFlag(countryName: String?):String?{
     else "https://www.countryflags.io/$countryName/flat/64.png"
 }
 
-fun SharedPreferences.shouldShowWalkThrough() = getBoolean(WalkThroughActivity::class.java.simpleName, true)
-fun SharedPreferences.walkThroughShown() = putBoolean(WalkThroughActivity::class.java.simpleName, false)
+private const val walkThroughKey = "WalkThroughPrefKey"
+fun SharedPreferences.shouldShowWalkThrough() = getBoolean(walkThroughKey, true)
+fun SharedPreferences.walkThroughShown() = putBoolean(walkThroughKey, false)
