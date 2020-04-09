@@ -37,7 +37,6 @@ class CountryViewModel(application: Application, private val country: String) : 
     private val mildConditionCasesData :MutableLiveData<String> = MutableLiveData()
     val mildCondition : LiveData<String> = mildConditionCasesData
 
-    private var retryCount = 0
 
     init {
         fetchData()
@@ -98,7 +97,7 @@ class CountryViewModel(application: Application, private val country: String) : 
                 tableElements?.removeAt(0)
             }
 
-            val tableList = tableElements?.map { country ->
+            val tableList = tableElements?.asSequence()?.map { country ->
                 val properties = country.select("td")
                 val coronaModel = CoronaModel(
                         countryName = properties.getOrNull(0)?.text().orEmpty(),
@@ -116,7 +115,7 @@ class CountryViewModel(application: Application, private val country: String) : 
                         hideFlag = true
                 )
                 coronaModel
-            }?.sortedByDescending { it.totalCases.replace(",", "").toInt() } ?: emptyList()
+            }?.sortedByDescending { it.totalCases.replace(",", "").toInt() }?.toList() ?: emptyList()
 
             if (tableList.isEmpty()) {
                 coronaListData.emptyData()

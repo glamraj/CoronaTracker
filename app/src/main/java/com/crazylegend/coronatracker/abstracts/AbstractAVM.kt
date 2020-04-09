@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 abstract class AbstractAVM(application: Application) : AndroidViewModel(application) {
     protected val compositeDisposable = CompositeDisposable()
 
+    var retryCount = 0
 
     override fun onCleared() {
         super.onCleared()

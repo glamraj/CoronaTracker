@@ -10,6 +10,7 @@ import com.crazylegend.kotlinextensions.sharedprefs.putBoolean
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import io.reactivex.plugins.RxJavaPlugins
 import javax.inject.Inject
 
 
@@ -26,6 +27,7 @@ class CoronaTracker : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
+        RxJavaPlugins.setErrorHandler {  }
         DaggerApplicationComponent.builder()
                 .create(this)
                 .build()

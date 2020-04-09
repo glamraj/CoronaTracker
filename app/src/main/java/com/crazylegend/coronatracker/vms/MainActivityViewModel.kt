@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.crazylegend.coronatracker.abstracts.AbstractAVM
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
+import com.crazylegend.coronatracker.dtos.NewsModel
 import com.crazylegend.kotlinextensions.collections.second
+import com.crazylegend.kotlinextensions.isNotNullOrEmpty
+import com.crazylegend.kotlinextensions.orElse
 import com.crazylegend.kotlinextensions.retrofit.*
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
 import com.crazylegend.kotlinextensions.rx.mainThreadScheduler
@@ -37,6 +40,8 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
     private val casesListData: MutableLiveData<List<String>> = MutableLiveData()
     val casesList: MutableLiveData<List<String>> = casesListData
 
+    private val newsData: MutableLiveData<RetrofitResult<List<NewsModel>>> = MutableLiveData()
+    val news: LiveData<RetrofitResult<List<NewsModel>>> = newsData
 
     init {
         fetchData()
@@ -55,6 +60,7 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
                     handleCases(it)
                     handleDate(it)
                     handleTable(it)
+                    handleNews(it)
                 }, {
                     coronaListData.callErrorPost(it)
                     it.printStackTrace()
@@ -71,9 +77,9 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
             tableElements?.removeAt(0)
         }
 
-        val tableList = tableElements?.map { country ->
+        val tableList = tableElements?.asSequence()?.map { country ->
             val properties = country.select("td")
-            val countryName = when (properties.getOrNull(0)?.text().orEmpty()) {
+            val countryName = when (properties.getOrNull(0)?.text()) {
                 "USA" -> "United States"
                 "UK" -> "United Kingdom"
                 "UAE" -> "United Arab Emirates"
@@ -94,7 +100,9 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
                     testsPerMPopulation = properties.getOrNull(11)?.text().orEmpty()
             )
             coronaModel
-        }?.sortedByDescending { it.totalCases.replace(",", "").toInt() } ?: emptyList()
+        }?.sortedByDescending { it.totalCases.replace(",", "").toInt() }?.filter {
+            it.countryName.isNotNullOrEmpty()
+        }?.toList() ?: emptyList()
 
         if (tableList.isEmpty()) {
             coronaListData.emptyData()
@@ -122,6 +130,27 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
         footerData.postValue(footer)
 
     }
+
+    private fun handleNews(it: Document?) {
+        val newsDiv = it?.getElementById("news_block")
+        if ((newsDiv == null || newsDiv.childrenSize() == 3) && retryCount<3){
+           newsData.emptyData()
+        }
+        val adapterList = newsDiv?.children()?.asSequence()?.map {
+            val newsDate = it.getElementsByClass("news_date")?.firstOrNull()
+            val newsText = it.getElementsByClass("news_li")?.firstOrNull()
+            val link = newsText?.getElementsByAttribute("href")?.second()?.attr("href")
+            if (newsDate != null || newsText !=null){
+                val formattedNewsText = newsText?.text()?.replace("(", "")?.replace(")", "")
+                        ?.replace("[source]","")?.trim()
+                NewsModel(newsDate?.text(), formattedNewsText, link)
+            } else {
+                null
+            }
+        }?.filterNotNull()?.toList()?: emptyList()
+        newsData.success(adapterList)
+    }
+
 
     private fun handleDate(document: Document) {
         val lastUpdated = document.getElementsByClass("content-inner")?.select("div")?.getOrNull(2)?.text()

@@ -16,6 +16,7 @@ import com.crazylegend.kotlinextensions.glide.loadImgNoCache
 import com.crazylegend.kotlinextensions.recyclerview.context
 import com.crazylegend.kotlinextensions.recyclerview.getDrawable
 import com.crazylegend.kotlinextensions.recyclerview.getString
+import com.crazylegend.kotlinextensions.tryOrIgnore
 import com.crazylegend.kotlinextensions.views.dp
 import com.crazylegend.kotlinextensions.views.gone
 import com.crazylegend.kotlinextensions.views.setPrecomputedText
@@ -39,7 +40,7 @@ class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerVie
 
     fun bind(item: CoronaModel) {
         animation.end()
-        if (item.hideFlag){
+        if (item.hideFlag) {
             binding.flag.gone()
             binding.country.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 marginStart = 16.dp
@@ -50,12 +51,14 @@ class CoronaViewHolder(private val binding: ItemviewCoronaBinding) : RecyclerVie
 
         } else {
             binding.flag.visible()
-            val countryFlag = manualCountryFlag(item.flagCode)?: countryFlag(item.countryName)
+            val countryFlag = manualCountryFlag(item.flagCode) ?: countryFlag(item.countryName)
             binding.flag.loadImgNoCache(countryFlag, getDrawable(R.drawable.ic_launcher_foreground)!!, getDrawable(R.drawable.ic_launcher_foreground)!!)
         }
         binding.country.setPrecomputedText(item.countryName)
-        binding.totalCasesAndDeaths.text = item.casesAndDeathsSpan(context)
-        binding.todayCasesAndDeaths.text = item.newCasesAndDeathsSpan(context)
+        tryOrIgnore {
+            binding.totalCasesAndDeaths.text = item.casesAndDeathsSpan(context)
+            binding.todayCasesAndDeaths.text = item.newCasesAndDeathsSpan(context)
+        }
         binding.todayText.text = getString(R.string.today)
     }
 
