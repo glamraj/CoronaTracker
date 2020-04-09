@@ -106,7 +106,7 @@ dependencies {
 
     //core
     implementation 'androidx.preference:preference:1.1.0'
-    implementation 'androidx.fragment:fragment-ktx:1.2.3'
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
     implementation 'androidx.activity:activity-ktx:1.1.0'
 
     //android apis
@@ -115,7 +115,6 @@ dependencies {
 
     //jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'com.github.CraZyLegenD:Cloudflare-bypass:0.0.1'
 
     //dagger
     def daggerVersion = "2.27"
@@ -126,5 +125,5 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     //my
-    implementation 'com.github.CraZyLegenD:Set-Of-Useful-Kotlin-Extensions-and-Helpers:1.0.89.45'
+    implementation 'com.github.CraZyLegenD:Set-Of-Useful-Kotlin-Extensions-and-Helpers:1.0.89.46'
 }
