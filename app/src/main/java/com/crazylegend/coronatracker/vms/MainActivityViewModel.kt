@@ -8,8 +8,9 @@ import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.dtos.NewsModel
 import com.crazylegend.kotlinextensions.collections.second
+import com.crazylegend.kotlinextensions.dateAndTime.convertTo
+import com.crazylegend.kotlinextensions.dateAndTime.currentDate
 import com.crazylegend.kotlinextensions.isNotNullOrEmpty
-import com.crazylegend.kotlinextensions.orElse
 import com.crazylegend.kotlinextensions.retrofit.*
 import com.crazylegend.kotlinextensions.rx.ioThreadScheduler
 import com.crazylegend.kotlinextensions.rx.mainThreadScheduler
@@ -29,7 +30,7 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
     val coronaList: LiveData<RetrofitResult<List<CoronaModel>>> = coronaListData
 
     private val filteredCoronaListData: MutableLiveData<List<CoronaModel>> = MutableLiveData()
-    val filteredCoronaList : LiveData<List<CoronaModel>> = filteredCoronaListData
+    val filteredCoronaList: LiveData<List<CoronaModel>> = filteredCoronaListData
 
     private val footerData: MutableLiveData<CoronaModel> = MutableLiveData()
     val footer: LiveData<CoronaModel> = footerData
@@ -133,22 +134,22 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
 
     private fun handleNews(it: Document?) {
         val newsDiv = it?.getElementById("news_block")
-        if ((newsDiv == null || newsDiv.childrenSize() == 3) && retryCount<3){
-           newsData.emptyData()
+        if ((newsDiv == null || newsDiv.childrenSize() == 3) && retryCount < 3) {
+            newsData.emptyData()
         }
-        val adapterList = newsDiv?.children()?.asSequence()?.map {
-            val newsDate = it.getElementsByClass("news_date")?.firstOrNull()
-            val newsText = it.getElementsByClass("news_li")?.firstOrNull()
+
+        val id = "newsdate${currentDate.convertTo("yyyy-MM-dd")}"
+        val adapterList = newsDiv?.getElementById(id)?.children()?.asSequence()?.map {
+            val newsText = it.getElementsByClass("news_li")?.firstOrNull() ?: it.getElementsByClass("news_body news_box").firstOrNull()
             val link = newsText?.getElementsByAttribute("href")?.second()?.attr("href")
-            if (newsDate != null || newsText !=null){
-                val formattedNewsText = newsText?.text()?.replace("(", "")?.replace(")", "")
-                        ?.replace("[source]","")?.trim()
-                NewsModel(newsDate?.text(), formattedNewsText, link)
-            } else {
-                null
-            }
-        }?.filterNotNull()?.toList()?: emptyList()
-        newsData.success(adapterList)
+            val formattedNewsText = newsText?.text()?.replace("(", "")?.replace(")", "")
+                    ?.replace("[source]", "")?.trim()
+
+            NewsModel(null, formattedNewsText, link)
+        }?.filterNotNull()?.toMutableList() ?: mutableListOf()
+        val list = adapterList.asReversed()
+        list.add(NewsModel(currentDate.convertTo("MMM dd"), null, null))
+        newsData.success(list.asReversed())
     }
 
 
@@ -165,7 +166,7 @@ class MainActivityViewModel(application: Application) : AbstractAVM(application)
     }
 
     fun filter(query: String) {
-        if (query.isBlank()){
+        if (query.isBlank()) {
             filteredCoronaListData.value = coronaListData.getSuccess
         } else {
             filteredCoronaListData.value = coronaListData.getSuccess?.filter { it.countryName.contains(query, true) }

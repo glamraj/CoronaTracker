@@ -74,7 +74,7 @@ class CountryViewModel(application: Application, private val country: String) : 
             retryCount++
         }
         val adapterList = newsDiv?.children()?.asSequence()?.map {
-            val newsDate = it.getElementsByClass("news_date")?.firstOrNull()
+            val newsDate = it.getElementsByClass("btn btn-light date-btn")?.firstOrNull()
             val newsText = it.getElementsByClass("news_li")?.firstOrNull()
             val link = newsText?.getElementsByAttribute("href")?.second()?.attr("href")
             if (newsDate != null || newsText !=null){
