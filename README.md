@@ -12,7 +12,7 @@ src="https://raw.githubusercontent.com/CraZyLegenD/CoronaTracker/master/screens/
 
 ## Installation
 
-Download the latest APK from [here](https://github.com/CraZyLegenD/CoronaTracker/releases/download/1.0.2/app-release.apk) to install the application.
+Download the latest APK from [here](https://github.com/CraZyLegenD/CoronaTracker/releases/download/1.0.3/app-release.apk) to install the application.
 
 
 ## Contributing
