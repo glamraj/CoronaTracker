@@ -39,6 +39,7 @@ data class CoronaModel(
         get() {
             return when (countryName) {
                 "United States" -> "us"
+                "United Kingdom"-> "uk"
                 "S. Korea" -> "south-korea"
                 "North Macedonia" -> "macedonia"
                 "DRC" -> "democratic-republic-of-the-congo"

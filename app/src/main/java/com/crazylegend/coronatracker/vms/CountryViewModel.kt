@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.crazylegend.coronatracker.BuildConfig
 import com.crazylegend.coronatracker.abstracts.AbstractAVM
 import com.crazylegend.coronatracker.consts.PRIMARY_URL
 import com.crazylegend.coronatracker.dtos.CoronaModel
 import com.crazylegend.coronatracker.dtos.NewsModel
 import com.crazylegend.kotlinextensions.collections.second
+import com.crazylegend.kotlinextensions.log.debug
 import com.crazylegend.kotlinextensions.retrofit.RetrofitResult
 import com.crazylegend.kotlinextensions.retrofit.emptyData
 import com.crazylegend.kotlinextensions.retrofit.loading
@@ -40,6 +42,9 @@ class CountryViewModel(application: Application, private val country: String) : 
 
     init {
         fetchData()
+        if (BuildConfig.DEBUG){
+            debug("COUNTRY $country")
+        }
     }
 
     @SuppressLint("DefaultLocale")
