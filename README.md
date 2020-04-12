@@ -19,4 +19,4 @@ Download the latest APK from [here](https://github.com/CraZyLegenD/CoronaTracker
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-[MIT](https://choosealicense.com/licenses/gpl-3.0/)
+[GPL3.0](https://choosealicense.com/licenses/gpl-3.0/)
