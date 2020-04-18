@@ -87,6 +87,7 @@
                 android:fadeScrollbars="true"
                 android:paddingBottom="80dp"
                 android:clipToPadding="false"
+                android:splitMotionEvents="false"
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
