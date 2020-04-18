@@ -1,6 +1,6 @@
 # Corona Tracker
 
-Corona tracker is a small and compact application to track 
+Corona tracker is a small and compact application to track the new COVID-19 virus
 
 ## Screens
 
